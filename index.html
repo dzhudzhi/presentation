@@ -1,0 +1,649 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+        <section>
+          <h2>var, let, const</h2>
+          <h2>and arrow functions</h2>
+          <p class="fragment">Hello There! <span class="fragment">Nice to see you!</span></p>
+          <p><span class="fragment">My name is </span><span class="fragment">Dzhudzhiev Anatolii</span></p>
+
+          <aside class="notes">
+            We'll talk about variables, scope and the var, let and const keywords.
+          </aside>
+        </section>
+
+        <section>
+          <h1>var, let and const</h1>
+
+          <aside class="notes">
+            Before the advent of the ECMAScript2015 standard, we had only one keyword for declaring variables var. Variables declared with var can be either in the scope of the function, if they are declared inside the function, in which case the variables are available only within the function they are declared inside, or in the global scope and then they are available anywhere.
+          </aside>
+        </section>
+
+        <section>
+
+          <section>
+            <p>var</p>
+            <pre class="fragment"><code data-trim data-noescape>
+              /*  global variable */
+              var <span class="fragment highlight-green">test</span> = 100;
+              (() => {
+                /*  local variable, only
+                    available inside the function */
+                var <span class="fragment highlight-green">test</span> = 200;
+                console.log(test); //200
+              })();
+              console.log(test); // 100
+            </code></pre>
+
+            <aside class="notes">
+              In the example, the test variable in the first case is declared in the global scope, and in the second, in the local scope of the function. The first console log displays the value of a local variable, and the second - a global one.
+            </aside>
+          </section>
+  
+          <section>
+            <p>var</p>
+            <pre><code data-trim data-noescape>
+              var test = 100;
+              console.log(test); //100
+              
+              test = 200;
+              console.log(test); //200
+            </code></pre>
+            <pre><code data-trim data-noescape>
+              var test = 100;
+              console.log(test); //100
+              
+              var test = 200;
+              console.log(test); //200
+            </code></pre>
+
+            <aside class="notes">
+              Variables declared with var can be assigned new values.
+              And, finally, variables declared using var can be redeclared, that is, create another variable with the same name, in the same scope.
+            </aside>
+          </section>
+  
+          <section>
+            <p>var</p>
+            <pre><code data-trim data-noescape>
+              /*  global variable */
+              var test = 100;
+              (() => {
+                console.log(<span class="fragment highlight-green">test</span>); //undefined
+                var test = 200;
+                console.log(test); //200
+              })();
+              console.log(test); // 100
+            </code></pre>
+
+            <aside class="notes">
+              Now back to the first example and add the output of the variable, let's say, here. The new console log will display the value undefined. This phenomenon is called hoisting. Before executing, JavaScript will do a quick read of the code and see if any variables will be defined, and hoist them within their scope if they are. In this case, it is the beginning of the function. Variables declared with var will be auto-initialized to undefined within their scope, even if you reference them before they’re declared. That's why we get undefined here.
+            </aside>
+          </section>
+
+        </section>
+        
+        <section>
+
+          <section>
+            <p>let</p>
+            <pre class="fragment"><code data-trim data-noescape>
+              /*  global variable */
+              let test = 100;
+
+              {
+                /*  local variable, only
+                    available inside the block */
+                let test = 200;
+                console.log(test); //200
+              }
+              console.log(test); // 100
+            </code></pre>
+            <aside class="notes">
+              In EcmaScript 6, two new keywords have been added to declare variables - let and const. The let keyword is very similar to var, but it still has some differences. To begin with, the variables declared with let are either in the global scope, or in the block-level scope. Let me remind you that the block is a section of code enclosed in braces.
+              In the example in the first case, the variable test is declared in the global scope, and in the second, in the local block-level scope.
+            </aside>
+          </section>
+  
+          <section>
+            <p>let</p>
+            <pre><code data-trim data-noescape>
+              let test = 100;
+              console.log(test); //100
+              
+              test = 200;
+              console.log(test); //200
+            </code></pre>
+
+            <aside class="notes">
+              You can assign new values ​​to variables declared with let.
+            </aside>
+          </section>
+  
+          <section>
+            <p>let</p>
+            <pre><code data-trim data-noescape>
+              let test = 100;
+              console.log(test); //100
+              
+              let test = 200;
+              console.log(test); //200
+            </code></pre>
+            <p class="fragment" style="color:#ef4fa6; font-size: 30px; text-align: left; margin-left: 45px;">SyntaxError:<br>Indentifier 'test' has already been declared</p>
+
+            <aside class="notes">
+              But, unlike var, variables declared with let cannot be redeclared. When we try to redeclare a variable, we get an error.
+            </aside>
+          </section>
+
+          <section>
+            <p>let</p>
+            <pre><code data-trim data-noescape>
+              for (let i = 0; i < 10; i++) {
+                /* ... */
+              }
+              
+              for (let i = 0; i < 10; i++) {
+                /* ... */
+              }
+            </code></pre>
+
+            <aside class="notes">
+              Each cycle creates its own scope. Therefore, you can use variables with the same name in different cycles.
+            </aside>
+          </section>
+
+          <section>
+            <p>let</p>
+            <pre><code data-trim data-noescape>
+              let i = 100;
+
+              for (let i = 0; i < 10; i++) {
+                let i = 200;
+                console.log(i) // 200
+              }
+            </code></pre>
+
+            <aside class="notes">
+              By the way, the body of the loop and the header of the loop create two scopes, so in this example we’ll get the value 200 10 times in the console.
+            </aside>
+          </section>
+
+          <section>
+            <p>let</p>
+            <pre><code data-trim data-noescape>
+              for (var i = 0; i < 10; i++) {
+                setTimeout(() => {
+                  console.log(i);
+                }, 10);
+              }
+            </code></pre>
+
+            <aside class="notes">
+              This behavior of let allows to solve the classical problem with closures. In the example with var, the console displays 10 times the value 10.
+            </aside>
+          </section>
+
+          <section>
+            <p>let</p>
+            <pre><code data-trim data-noescape>
+              for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                  console.log(i);
+                }, 10);
+              }
+            </code></pre>
+
+            <aside class="notes">
+              But if we replace var with let, then the example will work as expected, and in the console we will get values ​​from 0 to 9.
+            </aside>
+          </section>
+
+          <section>
+            <p>let</p>
+            <p class="fragment" data-fragment-index="3">temporal dead zone</p>
+            <pre class="fragment"  data-fragment-index="1"><code data-trim data-noescape>
+              /*  global variable */
+              let test = 100;
+
+              {
+                console.log(test); // Uncaught ReferenceError: test is not defined
+                let test = 200;
+              }
+              console.log(test); // 100
+            </code></pre>
+            <p class="fragment"  data-fragment-index="2" style="color:#ef4fa6; font-size: 30px; text-align: left; margin-left: 45px;">Uncaught ReferenceError: test is not defined</p>
+
+            <aside class="notes">
+              Let declarations also hoist, but the variables themselves are not available until they are defined.
+              This is called the temporal dead zone.
+            </aside>
+          </section>
+
+        </section>
+
+        <section>
+
+          <section>
+            <p>const</p>
+            <pre class="fragment"><code data-trim data-noescape>
+                const test = 1;
+                test = 2;
+            </code></pre>
+            <p class="fragment" style="color:#ef4fa6; font-size: 30px; text-align: left; margin-left: 45px;">Uncaught TypeError: Assignment to constant variable.</p>
+
+            <aside class="notes">
+              The const keyword is exactly the same as let,
+              but you cannot assign a new value to variables declared with const and you cannot declare an uninitialized constant.
+            </aside>
+          </section>
+
+          <section>
+            <p>const</p>
+            <pre><code data-trim data-noescape>
+              const foo = {};
+
+              foo.bar = 42;
+              console.log(foo); <span class="fragment">// { bar: 42 }</span>
+            </code></pre>
+
+            <aside class="notes">
+              It is worth nothing that if the constant is an object, then it is still possible to change its property. You cannot reassign the constant with new object.
+            </aside>
+          </section>
+
+        </section>
+
+        <section>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Scope</th>
+                <th>Reassign</th>
+                <th>Redefine</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>var</td>
+                <td><span class="fragment">function</span></td>
+                <td><span class="fragment">yes</span></td>
+                <td><span class="fragment">yes</span></td>
+              </tr>
+              <tr>
+                <td>let</td>
+                <td><span class="fragment">block</span></td>
+                <td><span class="fragment">yes</span></td>
+                <td><span class="fragment">no</span></td>
+              </tr>
+              <tr>
+                <td>const</td>
+                <td><span class="fragment">block</span></td>
+                <td><span class="fragment">no</span></td>
+                <td><span class="fragment">no</span></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <aside class="notes">
+            let's summarize. Variables declared with var fall into the scope of the function, they can be modified and redeclared. Variables declared with let are within the block-level scope, they can be changed, but not redeclared. Finally, variables declared with const fall within the block-level scope, but they cannot be changed or redeclared.
+            So which keyword to use and in what case? By default, you should use const, let use only if the variable really should be changed, and var should not be used at all.
+          </aside>
+        </section>
+
+        <section>
+          <h1>arrow functions</h1>
+          <h2>x => x * x</h2>
+
+          <aside class="notes">
+            The ecmascript 6 arrow functions solve two problems: the shorter function syntax and the lexical meaning of this.
+          </aside>
+        </section>
+
+        <section>
+          <pre><code data-trim data-noescape>
+            lambda x: x * x   # Python
+            x => x * x        // C#
+            x -> x * x        // Java
+            
+            // JavaScript
+            function(x) { return x * x; }
+          </code></pre>
+
+          <aside class="notes">
+            Compare the function declaration in javascript and other programming languages. Obviously, the syntax of the function in javascript is too long. In addition to return, you need to type the word function every time. And here the arrow functions come to the rescue.
+          </aside>
+        </section>
+
+        <section>
+          <pre><code data-trim data-noescape>            
+            // JavaScript
+            function(x) { return x * x; }
+            <span class="fragment fade-in-then-out">(x) { return x * x; }</span>
+            <span class="fragment fade-in-then-out">(x) => { return x * x; }</span>
+            <span class="fragment fade-in-then-out">(x) => x * x; </span>
+            <span class="fragment">x => x * x;</span>
+            <span class="fragment">
+            (x, y) => x * y; 
+            () => Math.random();
+            </span>
+          </code></pre>
+
+          <aside class="notes">
+            We remove the function keyword and add an arrow after listing the arguments. Go ahead.
+            If the function returns the result of an expression, then curly brackets and the return keyword can also be omitted. But that's not all.
+            If there is only one argument, then it is not necessary to write parentheses,
+            but if there are several or none, then parentheses are still needed.
+          </aside>
+        </section>
+
+        <section>
+
+          <section>
+            <pre><code data-trim data-noescape>
+              // short form
+              (x, y) => x * y;
+  
+              // block form
+              (x, y) => {
+                return x * y;
+              }
+            </code></pre>
+
+            <aside class="notes">
+              The body of a function can have a short or block form. In block form, you must explicitly return the result.
+            </aside>
+          </section>
+  
+          <section>
+            <pre><code data-trim data-noescape>
+              (x, y) // SyntaxError
+              => x * y;
+  
+              (x, y) => // OK
+              x * y;
+            </code></pre>
+
+            <aside class="notes">
+              Neither in short nor in block form, you can not transfer the arrow to a new line.
+            </aside>
+          </section>
+
+          <section>
+            <pre><code data-trim data-noescape>
+              (x, y) => ({
+                param1: x,
+                param2: y
+              });
+            </code></pre>
+
+            <aside class="notes">
+              Finally, if the result of the function is an object literal, then it must be enclosed in parentheses so that there is no confusion between the object literal and the block. That's the whole syntax.
+            </aside>
+          </section>
+
+        </section>
+
+        <section>
+
+          <section>
+            <pre><code data-trim data-noescape>
+              function User(username, roles) {
+                this.username = username;
+                this.roles = roles;
+              }
+              
+              User.prototype.getRoles = function() {
+                return this.roles.map(function(role) {
+                  return this.<span class="fragment highlight-green" data-fragment-index="2">username</span> + ' is ' + role; <span class="fragment" data-fragment-index="2">// value of this - Window</span>
+                });
+              }
+              
+              var user = new User('Neo', ['user', 'admin']);
+              console.log(user.getRoles());
+              <span class="fragment" data-fragment-index="1">// ["undefined is user", "undefined is admin"]</span>
+            </code></pre>
+
+            <aside class="notes">
+              Arrow functions solve one old javascript problem. They do not have their own this. Therefore, they capture value of this from the surrounding context. This is called lexical meaning. Recall that regular functions get this value dynamically, depending on how they are called.
+              Suppose we have such a code on es5. Here we have the user function, which emulates a class, two fields for this class, and the getRoles method, in which we go through the list of roles and return the new array of elements the user name plus the role. In this code crept unobvious error. If we call the getRoles method, we see that the username is undefined, and this is all because the value of this in the internal function is no longer user, but the global window object.
+            </aside>
+          </section>
+  
+          <section>
+            <pre><code data-trim data-noescape>
+              function User(username, roles) {
+                this.username = username;
+                this.roles = roles;
+              }
+              User.prototype.getRoles = function() {
+                var <span class="fragment highlight-green">self</span> = this;
+                return this.roles.map(function(role) {
+                  return <span class="fragment highlight-green">self.username</span> + ' is ' + role;
+                });
+              }
+              
+              var user = new User('Neo', ['user', 'admin']);
+              console.log(user.getRoles());
+              <span class="fragment">// ["Neo is user", "Neo is admin"]</span>
+            </code></pre>
+
+            <aside class="notes">
+              How was this problem solved in es5?
+              The easiest way is to save a reference to this in an internal variable.
+            </aside>
+          </section>
+
+          <section>
+            <pre><code data-trim data-noescape>
+              function User(username, roles) {
+                this.username = username;
+                this.roles = roles;
+              }
+              User.prototype.getRoles = function() {
+                return this.roles.map(function(role) {
+                  return this.username</span> + ' is ' + role;
+                }<span class="fragment highlight-green">.bind(this)</span>);
+              }
+              
+              var user = new User('Neo', ['user', 'admin']);
+              console.log(user.getRoles());
+              <span class="fragment">// ["Neo is user", "Neo is admin"]</span>
+            </code></pre>
+
+            <aside class="notes">
+              The second way is to use the bind method to explicitly specify the value of this.
+            </aside>
+          </section>
+
+          <section>
+            <pre><code data-trim data-noescape>
+              function User(username, roles) {
+                this.username = username;
+                this.roles = roles;
+              }
+              User.prototype.getRoles = function() {
+                return this.roles.map(function(role) {
+                  return this.username</span> + ' is ' + role;
+                }, this); <span class="fragment">// <-- here</span>
+              }
+              
+              var user = new User('Neo', ['user', 'admin']);
+              console.log(user.getRoles());
+              <span class="fragment">// ["Neo is user", "Neo is admin"]</span>
+            </code></pre>
+
+            <aside class="notes">
+              And finally, some methods, such as map or reduce, have a second optional argument, the value of this
+            </aside>
+          </section>
+
+          <section>
+            <pre><code data-trim data-noescape>
+              function User(username, roles) {
+                this.username = username;
+                this.roles = roles;
+              }
+              User.prototype.getRoles = function() {
+                return this.roles.map(<span class="fragment highlight-green">role =></span> {
+                  return this.username</span> + ' is ' + role;
+                });
+              }
+              
+              var user = new User('Neo', ['user', 'admin']);
+              console.log(user.getRoles());
+              <span class="fragment">// ["Neo is user", "Neo is admin"]</span>
+            </code></pre>
+
+            <aside class="notes">
+              Arrow functions solve this problem more elegantly.
+            </aside>
+          </section>
+
+        </section>
+
+        <section>
+          <p>this</p>
+          <p class="fragment">arguments</p>
+          <p class="fragment">super</p>
+          <p class="fragment">new.target</p>
+
+          <aside class="notes">
+            In addition to its this, the arrow functions do not have their own ​​arguments, super, and new.target.
+          </aside>
+        </section>
+
+        <section>
+          <div style="display: flex; justify-content: space-between;">
+            <div style="width: 400px">
+              <p>ES5</p>
+              <pre><code data-trim data-noescape>
+                a()
+                  .then(function() {
+                    return b();
+                  })
+                  .then(function() {
+                    return c();
+                  })
+                  .done(function() {
+                    finish();
+                  });
+              </code></pre>
+            </div>
+            <div style="width: 400px">
+              <p>ES6</p>
+              <pre><code data-trim data-noescape>
+                a()
+                  .then(() => b())
+                  .then(() => c())
+                  .done(() => finish());
+              </code></pre>
+            </div>
+          </div>
+
+          <aside class="notes">
+            When should the arrow functions be used? As we can see, they are very useful in working with arrays in methods such as map, reduce, or filter. Arrow functions are also useful as callback functions or in promises.
+          </aside>
+        </section>
+
+        <section>
+          <pre><code data-trim data-noescape>
+            const button = document.querySelector('.button');
+
+            button.addEventListener('click', () => {
+              // value of this - Window
+              this.classList.toggle('active');
+            });
+          </code></pre>
+
+          <aside class="notes">
+            Arrow functions should not be used when you need the dynamic value of this. For example, in the click handler.
+          </aside>
+        </section>
+
+        <section>
+          <p>Object method</p>
+          <pre><code data-trim data-noescape>
+            const user = {
+              age: 23,
+              getAge: () => {
+                return this.age; // value of this - Window
+              }
+            }
+          </code></pre>
+          <p>Prototype method</p>
+          <pre><code data-trim data-noescape>
+            function User(name) {
+              this.username = name;
+            }
+            User.prototype.getUserName = () => {
+              return this.username; // value of this - Window
+            }
+          </code></pre>
+
+          <aside class="notes">
+            Also, arrow functions should not be used as object methods or prototype methods.
+            So, we have seen that the arrow functions are a great innovation of ecmastrypt6. They not only shorten the code, but also solve the old javascript problem with the dynamic value of this. But you also need to use them not thoughtlessly, but carefully.
+          </aside>
+        </section>
+
+        <section>
+          <p>Thank you</p>
+          <p>I hope you enjoyed the presentation</p>
+          <p class="fragment">Star-Lord enjoyed =)</p>
+        </section>
+
+        <section data-background="http://i.giphy.com/90F8aUepslB84.gif">
+        </section>
+
+        <section>
+          <h1>the end</h1>
+        </section>
+
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
